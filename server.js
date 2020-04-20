@@ -4,6 +4,9 @@ const methodOverride = require('method-override');
 const port = process.env.PORT || 4000;
 const app = express();
 
+// Controllers
+const authorsController = require('./controllers/authorsController');
+
 // Set View Engine
 app.set('view engine', 'ejs');
 
@@ -24,6 +27,9 @@ app.get('/', (req, res) => {
     title: 'Home'
   });
 });
+
+// Authors Routes
+app.use('/authors', authorsController);
 
 
 // ---------------------- SERVER LISTENER
