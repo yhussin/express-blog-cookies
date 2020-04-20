@@ -42,5 +42,34 @@ router.post('/', (req, res) => {
   });
 });
 
+// GET Authors Show
+router.get('/:id', (req, res) => {
+  // Find Author By ID
+  db.Author.findById(req.params.id, (err, foundAuthor) => {
+    if (err) {
+      return res.send(err);
+    }
+
+    res.render('authors/show', {
+      author: foundAuthor,
+      title: 'Author Details'
+    });
+  });
+});
+
+// DELETE Authors Destroy
+router.delete('/:id/', (req, res) => {
+  // console.log('Request Params', req.params);
+  // console.log('Request Queries', req.query);
+  // Find the Author By ID and Remove
+  db.Author.findByIdAndDelete(req.params.id, (err, deletedAuthor) => {
+    if (err) {
+      return res.send(err);
+    }
+
+    res.redirect('/authors');
+  });
+});
+
 
 module.exports = router;

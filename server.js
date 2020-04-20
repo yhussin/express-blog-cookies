@@ -12,6 +12,9 @@ app.set('view engine', 'ejs');
 
 // ------------------------ MIDDLEWARE
 
+// Method Override (Update POST request for PUT & DELETE)
+app.use(methodOverride('_method'));
+
 // BodyParser
 // URL Encoded = ?name=John&age=23
 app.use(bodyParser.urlencoded({extended: false}));
