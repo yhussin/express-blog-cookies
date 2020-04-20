@@ -1,0 +1,13 @@
+<%- include('../partials/_head') %>
+
+  <main>
+    <h1>Edit Author</h1>
+
+    <form action="/authors/<%= author._id %>?_method=PUT" method="POST">
+      <label for="name">Name</label>
+      <input type="text" id="name" name="name" value="<%= author.name %>" />
+      <input type="submit" value="Update Author">
+    </form>
+  </main>
+
+<%- include('../partials/_footer') %>

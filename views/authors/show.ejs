@@ -13,6 +13,10 @@
       <form action="/authors/<%= author._id %>?_method=DELETE&myparam=myvalue&a=b" method="POST">
         <button type="submit">Delete Author</button>
       </form>
+
+      <a href="/authors/<%= author._id %>/edit">
+        <button>Edit Author</button>
+      </a>
     </section>
 
   </main>

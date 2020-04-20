@@ -57,6 +57,37 @@ router.get('/:id', (req, res) => {
   });
 });
 
+// GET Authors Edit
+router.get('/:id/edit', (req, res) => {
+  // Find Author By ID
+  db.Author.findById(req.params.id, (err, foundAuthor) => {
+    if (err) {
+      return res.send(err);
+    }
+
+    res.render('authors/edit', {
+      author: foundAuthor,
+      title: `Update ${foundAuthor.name}`,
+    });
+  });
+});
+
+// PUT Authors Update
+router.put('/:id', (req, res) => {
+  db.Author.findByIdAndUpdate(
+     req.params.id,
+     req.body,
+     {new: true},
+     (err, updatedAuthor) => {
+       if (err) {
+         return res.send(err);
+       }
+
+       res.redirect(`/authors/${updatedAuthor._id}`);
+     }
+  );
+});
+
 // DELETE Authors Destroy
 router.delete('/:id/', (req, res) => {
   // console.log('Request Params', req.params);
