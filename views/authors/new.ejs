@@ -1,0 +1,12 @@
+<%- include('../partials/_head') %>
+  <main>
+    <h1>Add New Author</h1>
+
+    <form action="/authors" method="POST">
+      <label for="name">Name</label>
+      <input type="text" id="name" name="name" />
+      <input type="submit" value="Add Author">
+    </form>
+
+  </main>
+<%- include('../partials/_footer') %>
