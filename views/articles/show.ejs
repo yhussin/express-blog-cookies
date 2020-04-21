@@ -4,6 +4,14 @@
     <h1>Article Details</h1>
   
     <h4><strong>Title</strong>: <%= article.title %></h4>
+
+    <small>
+      by
+      <a href="/authors/<%= article.author._id %>">
+        <%= article.author.name %>
+      </a>
+    </small>
+
     <p><%= article.body %> </p>
     <section>
       <form action="/articles/<%= article._id %>?_method=DELETE" method="POST">

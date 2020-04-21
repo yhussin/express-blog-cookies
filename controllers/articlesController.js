@@ -21,35 +21,75 @@ router.get('/', (req, res) => {
 
 // GET Articles New
 router.get('/new', (req, res) => {
-  res.render('articles/new', {
-    title: 'New Article'
+  // GET ALL AUTHORS FROM AUTHOR COLLECTION
+  db.Author.find({}, (err, allAuthors) => {
+    if (err) {
+      return res.send(err);
+    }
+
+    res.render('articles/new', {
+      title: 'New Article',
+      authors: allAuthors,
+    });
   });
 });
 
 // POST Articles Create
 router.post('/', (req, res) => {
   console.log(req.body);
+  // Create the article in the Articles collection
   db.Article.create(req.body, (err, newArticle) => {
     if (err) {
       return res.send(err);
     }
 
-    res.redirect('/articles');
+    // Add a reference to the article in the Author's articles
+    db.Author.findById(req.body.author, (err, foundAuthor) => {
+      if (err) {
+        return res.send(err);
+      }
+
+      // Associate the Author and Article
+      foundAuthor.articles.push(newArticle);
+
+      // Save the modified foundAuthor record
+      foundAuthor.save((err, savedAuthor) => {
+        if(err) {
+          return res.send(err);
+        }
+
+        res.redirect(`/articles/${newArticle._id}`);
+      });
+    });
   });
 });
 
 // GET Articles Show
 router.get('/:id', (req, res) => {
-  db.Article.findById(req.params.id, (err, foundArticle) => {
-    if (err) {
-      return res.send(err);
-    }
+  db.Article.findById(req.params.id)
+    .populate('author')
+    .exec((err, foundArticle) => {
+      if (err) {
+        return res.send(err);
+      }
 
-    res.render('articles/show', {
-      article: foundArticle,
-      title: 'Article Details'
+      res.render('articles/show', {
+        title: 'Article Details',
+        article: foundArticle,
+      });
     });
-  });
+    
+
+  // db.Article.findById(req.params.id, (err, foundArticle) => {
+  //   if (err) {
+  //     return res.send(err);
+  //   }
+
+  //   res.render('articles/show', {
+  //     article: foundArticle,
+  //     title: 'Article Details'
+  //   });
+  // });
 });
 
 // GET Articles Edit

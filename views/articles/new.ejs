@@ -5,11 +5,25 @@
 
     <form action="/articles" method="POST">
       <div>
-        <label for="title">Title</label>
+        <label for="title">Title</label><br />
         <input type="text" id="title" name="title" />
       </div>
+      <br />
       <div>
-        <label for="body">Content</label>
+        <label for="author">Author</label><br />
+        <select name="author" id="author">
+          <option value="" disabled selected>Please Select...</option>
+          
+          <!-- Loop through authors array and create an option for each -->
+          <% authors.forEach((author) => { %>
+            <option value="<%= author._id %>"><%= author.name %></option>
+          <% }) %>
+
+        </select>
+      </div>
+      <br />
+      <div>
+        <label for="body">Content</label><br />
         <textarea id="body" name="body"></textarea>
       </div>
       <button type="submit">Add Article</button>

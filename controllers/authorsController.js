@@ -50,6 +50,8 @@ router.get('/:id', (req, res) => {
       return res.send(err);
     }
 
+    console.log(foundAuthor);
+
     res.render('authors/show', {
       author: foundAuthor,
       title: 'Author Details'
