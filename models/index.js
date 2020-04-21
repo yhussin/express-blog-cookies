@@ -14,4 +14,5 @@ mongoose.connect(connectionString, configOptions)
 
 module.exports = {
   Author: require('./Author'),
+  Article: require('./Article'),
 };
