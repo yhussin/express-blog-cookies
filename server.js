@@ -6,6 +6,7 @@ const app = express();
 
 // Controllers
 const authorsController = require('./controllers/authorsController');
+const articlesController = require('./controllers/articlesController');
 
 // Set View Engine
 app.set('view engine', 'ejs');
@@ -33,6 +34,9 @@ app.get('/', (req, res) => {
 
 // Authors Routes
 app.use('/authors', authorsController);
+
+// Articles Routes
+app.use('/articles', articlesController);
 
 
 // ---------------------- SERVER LISTENER

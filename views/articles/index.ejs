@@ -1,0 +1,17 @@
+<%- include('../partials/_head') %>
+
+  <main>
+    <h1>All Articles</h1>
+  
+    <% articles.forEach(article => { %>
+     <div>
+        <h4>
+          <a href="/articles/<%= article._id %>">
+            <%= article.title %>
+          </a>
+        </h4>
+     </div>
+    <% }) %>
+  </main>
+
+<%- include('../partials/_footer') %>
