@@ -124,7 +124,23 @@ router.delete('/:id', (req, res) => {
       return res.send(err);
     }
 
-    res.redirect('/articles');
+    db.Author.findById(deletedArticle.author, (err, foundAuthor) => {
+      if (err) {
+        return res.send(err);
+      }
+
+      console.log('Author before remove', foundAuthor);
+      // The remove method takes the id you want removed from an array
+      foundAuthor.articles.remove(req.params.id);
+      console.log('Author after remove', foundAuthor);
+      foundAuthor.save((err, savedAuthor) => {
+        if (err) {
+          return res.send(err);
+        }
+
+        res.redirect('/articles');
+      });
+    });
   });
 });
 

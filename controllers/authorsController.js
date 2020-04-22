@@ -16,7 +16,7 @@ router.get('/', (req, res) => {
 
     res.render('authors/index', {
       authors: allAuthors,
-      title: 'Authors'
+      title: 'Authors',
     });
   });
 });
@@ -24,7 +24,7 @@ router.get('/', (req, res) => {
 // GET Authors New
 router.get('/new', (req, res) => {
   res.render('authors/new', {
-    title: 'Add New Author'
+    title: 'Add New Author',
   });
 });
 
@@ -45,18 +45,34 @@ router.post('/', (req, res) => {
 // GET Authors Show
 router.get('/:id', (req, res) => {
   // Find Author By ID
-  db.Author.findById(req.params.id, (err, foundAuthor) => {
-    if (err) {
-      return res.send(err);
-    }
+  db.Author.findById(req.params.id)
+    .populate('articles')
+    .exec((err, foundAuthor) => {
+      if (err) {
+        return res.send(err);
+      }
 
-    console.log(foundAuthor);
+      console.log(foundAuthor);
 
-    res.render('authors/show', {
-      author: foundAuthor,
-      title: 'Author Details'
+      res.render('authors/show', {
+        title: 'Author Details',
+        author: foundAuthor,
+      });
     });
-  });
+
+  // Find Author By ID
+  // db.Author.findById(req.params.id, (err, foundAuthor) => {
+  //   if (err) {
+  //     return res.send(err);
+  //   }
+
+  //   console.log(foundAuthor);
+
+  //   res.render('authors/show', {
+  //     author: foundAuthor,
+  //     title: 'Author Details',
+  //   });
+  // });
 });
 
 // GET Authors Edit
@@ -100,7 +116,15 @@ router.delete('/:id/', (req, res) => {
       return res.send(err);
     }
 
-    res.redirect('/authors');
+    db.Article.deleteMany({author: req.params.id}, (err, result) => {
+      if (err) {
+        return res.send(err);
+      }
+
+      console.log('Delete Many Result = ', result);
+
+      res.redirect('/authors');
+    });
   });
 });
 

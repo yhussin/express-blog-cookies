@@ -22,8 +22,11 @@
     <section>
       <h4>Articles:</h4>
       <ul>
-        <li><a href="">Brave New World</a></li>
-        <li>Article Show</li>
+        <% author.articles.forEach((article) => { %>
+          <li>
+            <a href="/articles/<%= article._id %>"><%= article.title %></a>
+          </li>
+        <% }) %>
       </ul>
     </section>
 
