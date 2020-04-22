@@ -8,11 +8,12 @@ const configOptions = {
 };
 
 mongoose.connect(connectionString, configOptions)
-  .then(() => console.log('MongoDB connected successfully...'))
+  .then(() => {console.log('MongoDB connected successfully...')})
   .catch((err) => console.log(`MongoDB connection error: ${err}`));
 
 
 module.exports = {
   Author: require('./Author'),
   Article: require('./Article'),
+  User: require('./User'),
 };
