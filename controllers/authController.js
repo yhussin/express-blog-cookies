@@ -1,66 +1,71 @@
+//deals with registering, logging on and off
 const express = require('express');
 const router = express.Router();
 
-// Database
+//DATABASE
 const db = require('../models');
 
-// GET Register New
+//GET register new user
 router.get('/register', (req, res) => {
-  res.render('auth/register', {
-    title: 'Register',
-  });
+    //it is not auth/register because that would double it to auth/auth
+    res.render('auth/register', {
+        title: 'Register',
+    });
 });
 
-// POST Register Create (User)
+//POST register (create user)
 router.post('/register', async (req, res) => {
-  // Validating
-  console.log('New User Obj = ', req.body);
-  try {
-    // Create A New User
-    // Redirect To The Login page
-    const user = await db.User.findOne({username: req.body.username});
+    //validating
+    try {
+        //Create a new user
+        //redirect to login page
+        const user = await db.User.findOne({username: req.body});
+        
+        //check if we got a user object back from the db
+        if (user) {
+            return res.send('<h1>Account already exists, please log in</h1>')
+        }
+        
+        //TODO: Hash password
 
-    // Check If We Got A User Object Back From The Database
-    if (user) {
-      return res.send('<h1>Account already exists, please login</h1>');
+        const userData = userData = {
+            username: req.body.username,
+            email: req.body.email,
+        }
+
+        const newUser = await db.User.create(req.body);
+        
+        //Redirect
+        res.redirect('/auth/login');
+    } catch (err) {
+        res.send(err);
     }
-
-    // TODO: Hash Password
-
-    const userData = {
-      username: req.body.username,
-      email: req.body.email,
-    }
-
-    // Creating the new user
-    await db.User.create(userData);
-
-    // Redirect to the login page
-    res.redirect('/auth/login');
-  } catch (err) {
-    res.send(err);
-  }
 });
 
-// GET Login New
-router.get('/login', (req, res) => {
-  res.render('auth/login', {
-    title: 'Login',
-  });
-});
-
-// POST Login Create (Session)
+//POST login create (session)
 router.post('/login', async (req, res) => {
-  // Check for Existing User Account
-
-  // Verify foundUser and password sent from the login form match
-
-  // If passwords don't match respond with vague error.
-
-  // If Passwords do match, create new session and redirect to Authors page
-
-
-  
+    try {
+        const user = await db.User.findOne({username: req.body.username});
+        if (!user) {
+          return res.render('auth/login', {
+            title: 'Login',
+            error: 'Invalid Credentials',
+          });
+        }
+        // Check passwords
+        //TODO: update password verification
+        if (req.body.password !== '1234') {
+          return res.render('auth/login', {
+            title: 'Login',
+            error: 'Invalid Credentials',
+          });
+        }
+        // Create Session
+        req.session.currentUser = user._id;
+        res.redirect('/authors');
+      } catch (error) {
+        res.send(err);
+      }
 });
 
 module.exports = router;
